@@ -5,22 +5,22 @@ int n, m, k;
 bool found[1000005];
 int anc[1000005], sz[1000005];
 
-int root(int x){
+inline int root(int x){
     if(anc[x] == x)
         return x;
-    return root(anc[x]);
+    return anc[x] = root(anc[x]);
 }
 
 void join(int a, int b){
-    int ra = anc[a], rb = anc[b];
-    if(sz[ra] < sz[rb])
-        anc[ra] = rb;
-    else if(sz[ra] > sz[rb])
-        anc[rb] = ra;
-    else{
-        anc[ra] = rb;
-        sz[rb]++; 
-    }
+    a = root(a);
+    b = root(b);
+    if(a == b)
+        return;
+    if(sz[a] < sz[b])
+        swap(a, b);
+    anc[b] = a;
+    if(sz[a] == sz[b])
+        sz[a]++;
 }
 
 int main(){
@@ -33,7 +33,7 @@ int main(){
 
     for(int i = 0; i < m; i++){
         int a, b;
-        cin >> a >> b;
+        scanf("%d%d", &a, &b);
         join(a, b);
     }
 
